@@ -73,16 +73,63 @@ return array[i];
 
 }
 
+//------------------------------------------------------------
+//ROTAS DA API
+//------------------------------------------------------------
+
+//ROTA 1 - SORTEAR UM CACHORRO ALEATÓRIO
+//GET /api/cachorros/aleatorio
+app.get("/api/cachorros/aleatorio", (req, res) => {
+
+})
+//req - request - requisição do cliente
+//res - response - resposta do servidor
+
+//pegar todas as raças de cachorros do arquivo JSON
+//object.values() - pega todos os valores do objeto e retorna um array
+//flat() - transforma um array de arrays em um array único
+const todasAsFotos = Object.values(cachorros).flat();
 
 
+//sortear uma foto aleatória
+const item = sortear(todasAsFotos);
 
+//retornar a foto sorteada para o cliente
+res.json({ 
+    //status da resposta
+    status: "sucess",
+//URL da foto sorteada
+    url: `http://localhost:${PORT}/fotos/${item}`
+});
 
+//ROTA 2 - BUSCAR UMA RAÇA ESPECÍFICA
+//EXEMPLO: GET /api/cachorros/husky
+//localhost:3000/api/cachorros/husky
+app.get("/api/cachorros/:raca", (req, res) => {
 
+//pega o parâmetro da URL (ex: husky)
+const raca = req.params.raca.toLocaleLowerCase();
 
+//params = contém os parâmetros da URL
+//.raca = pega o parâmetro "raca" da URL
+//.tolocaleLowerCase() = transforma todas as letras em minúscula
+//parâmetro da URL é sempre uma string, então usamos toLocaleLowerCase() para garantir que seja minúscula
+if (!cachorros[raca]) {
+    //se a raça não existe no arquivo JSON, retorna um erro
+    return res.status(404).json({
+        status: "error",
+        message: "Raça não encontrada"
+    });
+    //encerrar a rota com o return para não continuar executando o código
+    return; 
+}
+})
 
+//sorteia uma foto aleatória da raça solicitada
+const item2 = sortear(cachorros[raca]);
 
-
-
-
-
-
+//retorna a foto sorteada para o cliente
+res.json({
+    status: "sucess",
+    message: `http://localhost:${PORT}/fotos/${item}`
+});

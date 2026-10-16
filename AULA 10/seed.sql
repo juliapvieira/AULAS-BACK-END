@@ -8,3 +8,5 @@ create table usuarios (
 
 INSERT INTO usuarios (id, name, email) 
 VALUES (1, 'Julia', 'julia@example.com');
+
+SELECT * FROM usuarios;
